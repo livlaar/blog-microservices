@@ -1,0 +1,30 @@
+services:
+  posts:
+    build: ./posts
+    ports:
+      - "8002:8002"
+    depends_on:
+      - comments
+      - users
+    environment:
+      - COMMENTS_ADDR=http://comments:8003
+      - USERS_ADDR=http://users:8001
+    volumes:
+      - ./data/posts:/app/data 
+
+  comments:
+    build: ./comments
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./data/comments:/app/data 
+
+  users:
+    build: ./users
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - CONSUL_ADDR=http://consul:8500
+    volumes:
+      - ./data/users:/app/data
