@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/livlaar/blog-microservices/users/models/model"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 // UserDTO representa el usuario obtenido desde Users

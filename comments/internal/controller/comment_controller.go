@@ -5,7 +5,7 @@ import (
 
 	"github.com/livlaar/blog-microservices/comments/internal/gateway"
 	"github.com/livlaar/blog-microservices/comments/internal/repository"
-	"github.com/livlaar/blog-microservices/comments/models/model"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type CommentController struct {

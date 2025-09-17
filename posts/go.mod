@@ -5,6 +5,7 @@ go 1.25.1
 require (
 	github.com/gorilla/mux v1.8.1
 	github.com/hashicorp/consul/api v1.32.1
+	github.com/livlaar/blog-microservices/shared v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -26,4 +27,4 @@ require (
 	golang.org/x/sys v0.31.0 // indirect
 )
 
-replace blog-microservices/shared => ../shared
+replace github.com/livlaar/blog-microservices/shared => ../shared

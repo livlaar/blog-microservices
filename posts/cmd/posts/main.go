@@ -27,16 +27,25 @@ func main() {
 		consulAddr = "http://consul:8500"
 	}
 
+	// Repositorio de Posts
 	repo := repository.NewFileRepo()
+
+	// Gateways
 	commentsGw := gateway.NewCommentsGateway("http://comments:8003")
-	ctrl := controller.NewPostController(repo, commentsGw)
+	usersGw := gateway.NewUsersGateway("http://users:8001")
+
+	// Controlador
+	ctrl := controller.NewPostController(repo, commentsGw, usersGw)
+
+	// Handler
 	h := handler.NewPostHandler(ctrl)
 
+	// Router
 	r := mux.NewRouter()
 	r.HandleFunc("/posts/{id}", h.GetPost).Methods("GET")
 	r.HandleFunc("/posts", h.CreatePost).Methods("POST")
 
-	// Health endpoint para Consul
+	// Health endpoint
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
@@ -67,13 +76,6 @@ func main() {
 		}
 	}
 
-	// Health endpoint
-	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
-	})
-
-	// Inicia servidor
 	log.Printf("Posts service running on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

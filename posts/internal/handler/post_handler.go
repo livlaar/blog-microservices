@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/livlaar/blog-microservices/posts/internal/controller"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type PostHandler struct {

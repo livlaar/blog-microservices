@@ -7,19 +7,19 @@ import (
 	"os"
 	"sync"
 
-	"github.com/livlaar/blog-microservices/users/models/model"
+	models "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type FileRepo struct {
 	file string
 	mu   sync.Mutex
-	data map[string]model.User
+	data map[string]models.User
 }
 
 func NewFileRepo(filename string) (*FileRepo, error) {
 	r := &FileRepo{
 		file: "/app/data/users.json",
-		data: make(map[string]model.User),
+		data: make(map[string]models.User),
 	}
 
 	// Si existe el archivo, cargar datos
@@ -42,18 +42,18 @@ func (r *FileRepo) saveToFile() error {
 	return os.WriteFile(r.file, bytes, 0644)
 }
 
-func (r *FileRepo) GetByID(id string) (model.User, error) {
+func (r *FileRepo) GetByID(id string) (models.User, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	user, ok := r.data[id]
 	if !ok {
-		return model.User{}, errors.New("usuario no encontrado")
+		return models.User{}, errors.New("usuario no encontrado")
 	}
 	return user, nil
 }
 
-func (r *FileRepo) Create(user model.User) error {
+func (r *FileRepo) Create(user models.User) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -64,24 +64,24 @@ func (r *FileRepo) Create(user model.User) error {
 func (r *FileRepo) load() {
 	if _, err := os.Stat(r.file); os.IsNotExist(err) {
 		// archivo no existe, inicializamos vacío
-		r.data = make(map[string]model.User)
+		r.data = make(map[string]models.User)
 		return
 	}
 
 	bytes, err := os.ReadFile(r.file)
 	if err != nil {
 		log.Println("Error leyendo users.json:", err)
-		r.data = make(map[string]model.User)
+		r.data = make(map[string]models.User)
 		return
 	}
 
 	if err := json.Unmarshal(bytes, &r.data); err != nil {
 		log.Println("Error parseando users.json:", err)
-		r.data = make(map[string]model.User)
+		r.data = make(map[string]models.User)
 	}
 }
 
 type UserRepository interface {
-	GetByID(id string) (model.User, error)
-	Create(user model.User) error
+	GetByID(id string) (models.User, error)
+	Create(user models.User) error
 }

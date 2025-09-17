@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	model "github.com/livlaar/blog-microservices/shared/models"
 	"github.com/livlaar/blog-microservices/users/internal/controller"
-	"github.com/livlaar/blog-microservices/users/models/model"
 
 	"github.com/gorilla/mux"
 )

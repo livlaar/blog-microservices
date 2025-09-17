@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/livlaar/blog-microservices/comments/models/model"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type CommentRepository interface {

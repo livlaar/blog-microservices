@@ -1,8 +1,8 @@
 package controller
 
 import (
+	model "github.com/livlaar/blog-microservices/shared/models"
 	"github.com/livlaar/blog-microservices/users/internal/repository"
-	"github.com/livlaar/blog-microservices/users/models/model"
 )
 
 type UserController struct {

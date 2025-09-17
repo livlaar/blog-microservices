@@ -6,25 +6,25 @@ import (
 	"os"
 	"sync"
 
-	"blog-microservices/shared/models"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type PostRepository interface {
-	GetByID(id string) (models.Post, error)
-	Create(post models.Post) error
-	GetAll() []models.Post
+	GetByID(id string) (model.Post, error)
+	Create(post model.Post) error
+	GetAll() []model.Post
 }
 
 type FileRepo struct {
 	mu   sync.Mutex
 	file string
-	data map[string]models.Post
+	data map[string]model.Post
 }
 
 func NewFileRepo() *FileRepo {
 	r := &FileRepo{
 		file: "/app/data/posts.json",
-		data: make(map[string]models.Post),
+		data: make(map[string]model.Post),
 	}
 	r.load()
 	return r
@@ -32,20 +32,20 @@ func NewFileRepo() *FileRepo {
 
 func (r *FileRepo) load() {
 	if _, err := os.Stat(r.file); os.IsNotExist(err) {
-		r.data = make(map[string]models.Post)
+		r.data = make(map[string]model.Post)
 		return
 	}
 
 	bytes, err := os.ReadFile(r.file)
 	if err != nil {
 		log.Println("Error leyendo posts.json:", err)
-		r.data = make(map[string]models.Post)
+		r.data = make(map[string]model.Post)
 		return
 	}
 
 	if err := json.Unmarshal(bytes, &r.data); err != nil {
 		log.Println("Error parseando posts.json:", err)
-		r.data = make(map[string]models.Post)
+		r.data = make(map[string]model.Post)
 	}
 }
 
@@ -61,18 +61,18 @@ func (r *FileRepo) save() {
 	}
 }
 
-func (r *FileRepo) GetByID(id string) (models.Post, error) {
+func (r *FileRepo) GetByID(id string) (model.Post, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	post, ok := r.data[id]
 	if !ok {
-		return models.Post{}, ErrPostNotFound
+		return model.Post{}, ErrPostNotFound
 	}
 	return post, nil
 }
 
-func (r *FileRepo) Create(post models.Post) error {
+func (r *FileRepo) Create(post model.Post) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -81,11 +81,11 @@ func (r *FileRepo) Create(post models.Post) error {
 	return nil
 }
 
-func (r *FileRepo) GetAll() []models.Post {
+func (r *FileRepo) GetAll() []model.Post {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	posts := make([]models.Post, 0, len(r.data))
+	posts := make([]model.Post, 0, len(r.data))
 	for _, p := range r.data {
 		posts = append(posts, p)
 	}

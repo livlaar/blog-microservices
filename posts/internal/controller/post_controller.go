@@ -5,18 +5,20 @@ import (
 
 	"github.com/livlaar/blog-microservices/posts/internal/gateway"
 	"github.com/livlaar/blog-microservices/posts/internal/repository"
-	"github.com/livlaar/blog-microservices/posts/models/model"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type PostController struct {
 	repo       repository.PostRepository
 	commentsGw *gateway.CommentsGateway
+	usersGw    *gateway.UsersGateway
 }
 
-func NewPostController(r repository.PostRepository, cg *gateway.CommentsGateway) *PostController {
+func NewPostController(r repository.PostRepository, cg *gateway.CommentsGateway, ug *gateway.UsersGateway) *PostController {
 	return &PostController{
 		repo:       r,
 		commentsGw: cg,
+		usersGw:    ug,
 	}
 }
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/livlaar/blog-microservices/comments/internal/controller"
-	"github.com/livlaar/blog-microservices/comments/models/model"
+	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type CommentHandler struct {
