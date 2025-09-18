@@ -5,7 +5,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY . .
 
-WORKDIR /app/cmd/comments
-RUN go build -o comments .
+WORKDIR /app/comments
+RUN go mod tidy
+RUN go build -o comments ./cmd/comments
 
 CMD ["./comments"]

@@ -1,30 +1,59 @@
+version: "3.9"  # o la versión que quieras usar
+
 services:
+
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: agent -dev -client=0.0.0.0
+
   posts:
-    build: ./posts
+    build:
+      context: .
+      dockerfile: ./posts/Dockerfile
     ports:
       - "8002:8002"
     depends_on:
+      - consul
       - comments
       - users
     environment:
-      - COMMENTS_ADDR=http://comments:8003
-      - USERS_ADDR=http://users:8001
+      - COMMENTS_ADDR=http://localhost:8003
+      - USERS_ADDR=http://localhost:8001
     volumes:
       - ./data/posts:/app/data 
+    labels:
+      - "consul.register=true"
 
   comments:
-    build: ./comments
+    build:
+      context: .
+      dockerfile: ./comments/Dockerfile
     ports:
       - "8003:8003"
+    depends_on:
+      - consul
     volumes:
       - ./data/comments:/app/data 
+    labels:
+      - "consul.register=true"
 
   users:
-    build: ./users
+    build:
+      context: .
+      dockerfile: ./users/Dockerfile
     ports:
       - "8001:8001"
+    depends_on:
+      - consul
     environment:
       - PORT=8001
       - CONSUL_ADDR=http://consul:8500
     volumes:
       - ./data/users:/app/data
+      - ./shared:/app/shared
+    labels:
+      - "consul.register=true"

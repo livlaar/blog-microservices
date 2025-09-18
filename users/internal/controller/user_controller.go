@@ -18,5 +18,5 @@ func (c *UserController) GetUserByID(id string) (model.User, error) {
 }
 
 func (c *UserController) CreateUser(user model.User) error {
-	return c.repo.Create(user) // <- devuelve error ahora
+	return c.repo.Create(user)
 }

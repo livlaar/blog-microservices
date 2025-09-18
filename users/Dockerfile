@@ -5,7 +5,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY . .
 
-WORKDIR /app/cmd/users
-RUN go build -o users .
+WORKDIR /app/users
+RUN go mod tidy
+RUN go build -o users ./cmd/users
 
 CMD ["./users"]

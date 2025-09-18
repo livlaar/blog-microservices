@@ -15,43 +15,34 @@ import (
 )
 
 func main() {
-	// Puerto
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8002"
 	}
 
-	// Dirección de Consul
 	consulAddr := os.Getenv("CONSUL_ADDR")
 	if consulAddr == "" {
 		consulAddr = "http://consul:8500"
 	}
 
-	// Repositorio de Posts
 	repo := repository.NewFileRepo()
 
-	// Gateways
-	commentsGw := gateway.NewCommentsGateway("http://comments:8003")
-	usersGw := gateway.NewUsersGateway("http://users:8001")
+	commentsGw := gateway.NewCommentsGateway("http://localhost:8003")
+	usersGw := gateway.NewUsersGateway("http://localhost:8001")
 
-	// Controlador
 	ctrl := controller.NewPostController(repo, commentsGw, usersGw)
 
-	// Handler
 	h := handler.NewPostHandler(ctrl)
 
-	// Router
 	r := mux.NewRouter()
 	r.HandleFunc("/posts/{id}", h.GetPost).Methods("GET")
 	r.HandleFunc("/posts", h.CreatePost).Methods("POST")
 
-	// Health endpoint
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
 
-	// Registro en Consul
 	config := api.DefaultConfig()
 	config.Address = consulAddr
 	client, err := api.NewClient(config)
@@ -63,7 +54,7 @@ func main() {
 			Name: "posts",
 			Port: 8002,
 			Check: &api.AgentServiceCheck{
-				HTTP:     "http://posts:8002/health",
+				HTTP:     "http://blog-microservices-posts-1:8002/health",
 				Interval: "10s",
 				Timeout:  "2s",
 			},

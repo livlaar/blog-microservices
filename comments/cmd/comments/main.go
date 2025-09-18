@@ -27,7 +27,7 @@ func main() {
 
 	repo := repository.NewFileRepo()
 
-	postsAddr := "http://posts:8002" // nombre del servicio de posts
+	postsAddr := "http://localhost:8002"
 	postsGw := gateway.NewPostsGateway(postsAddr)
 
 	ctrl := controller.NewCommentController(repo, postsGw)
@@ -42,7 +42,6 @@ func main() {
 		w.Write([]byte("OK"))
 	})
 
-	// Registro en Consul
 	config := api.DefaultConfig()
 	config.Address = consulAddr
 	client, err := api.NewClient(config)
@@ -52,7 +51,7 @@ func main() {
 			Name: "comments",
 			Port: 8003,
 			Check: &api.AgentServiceCheck{
-				HTTP:     "http://comments:8003/health",
+				HTTP:     "http://blog-microservices-comments-1:8003/health",
 				Interval: "10s",
 				Timeout:  "2s",
 			},

@@ -42,10 +42,9 @@ func (c *PostController) CreatePost(post model.Post) error {
 	}
 
 	if !exists {
-		// Crear usuario automáticamente
 		err := c.usersGw.CreateUser(model.User{
 			ID:   post.AuthorID,
-			Name: fmt.Sprintf("User-%s", post.AuthorID), // o tomas el valor del JSON
+			Name: fmt.Sprintf("User-%s", post.AuthorID),
 		})
 		if err != nil {
 			return fmt.Errorf("no se pudo crear el usuario: %w", err)

@@ -17,7 +17,6 @@ func NewCommentHandler(c *controller.CommentController) *CommentHandler {
 	return &CommentHandler{ctrl: c}
 }
 
-// GET /comments/{id}
 func (h *CommentHandler) GetComment(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -32,7 +31,6 @@ func (h *CommentHandler) GetComment(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(comment)
 }
 
-// GET /posts/{id}/comments
 func (h *CommentHandler) GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	postID := vars["id"]
@@ -47,7 +45,6 @@ func (h *CommentHandler) GetCommentsByPost(w http.ResponseWriter, r *http.Reques
 	json.NewEncoder(w).Encode(comments)
 }
 
-// POST /comments
 func (h *CommentHandler) CreateComment(w http.ResponseWriter, r *http.Request) {
 	var comment model.Comment
 	if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {

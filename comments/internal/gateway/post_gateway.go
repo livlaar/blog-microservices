@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-// PostsGateway hace llamadas HTTP al servicio Posts
 type PostsGateway struct {
 	baseURL string
 	client  *http.Client
@@ -19,7 +18,6 @@ func NewPostsGateway(baseURL string) *PostsGateway {
 	}
 }
 
-// CheckPostExists valida si un post existe antes de crear un comentario
 func (g *PostsGateway) CheckPostExists(postID string) (bool, error) {
 	resp, err := g.client.Get(fmt.Sprintf("%s/posts/%s", g.baseURL, postID))
 	if err != nil {

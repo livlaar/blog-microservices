@@ -5,7 +5,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY . .
 
-WORKDIR /app/cmd/posts
-RUN go build -o posts .
+WORKDIR /app/posts
+RUN go mod tidy
+RUN go build -o posts ./cmd/posts
 
 CMD ["./posts"]

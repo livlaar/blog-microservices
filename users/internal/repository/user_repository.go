@@ -22,7 +22,6 @@ func NewFileRepo(filename string) (*FileRepo, error) {
 		data: make(map[string]models.User),
 	}
 
-	// Si existe el archivo, cargar datos
 	if _, err := os.Stat(filename); err == nil {
 		bytes, err := os.ReadFile(filename)
 		if err != nil {
@@ -63,7 +62,6 @@ func (r *FileRepo) Create(user models.User) error {
 
 func (r *FileRepo) load() {
 	if _, err := os.Stat(r.file); os.IsNotExist(err) {
-		// archivo no existe, inicializamos vacío
 		r.data = make(map[string]models.User)
 		return
 	}

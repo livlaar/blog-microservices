@@ -1,4 +1,11 @@
 {
+  "": {
+    "id": "",
+    "post_id": "post-001",
+    "author_id": "usuario123",
+    "content": "Probando comentario en post que no existe",
+    "created_at": ""
+  },
   "1": {
     "id": "1",
     "post_id": "101",

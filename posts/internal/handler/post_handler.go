@@ -17,7 +17,6 @@ func NewPostHandler(c *controller.PostController) *PostHandler {
 	return &PostHandler{ctrl: c}
 }
 
-// GET /posts/{id}
 func (h *PostHandler) GetPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	postID := vars["id"]
@@ -29,15 +28,14 @@ func (h *PostHandler) GetPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := map[string]interface{}{
-		"post":     post,     // model.Post
-		"comments": comments, // []gateway.CommentDTO
+		"post":     post,
+		"comments": comments,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
-// POST /posts
 func (h *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	var post model.Post
 	if err := json.NewDecoder(r.Body).Decode(&post); err != nil {

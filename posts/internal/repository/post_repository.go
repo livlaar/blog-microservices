@@ -92,7 +92,6 @@ func (r *FileRepo) GetAll() []model.Post {
 	return posts
 }
 
-// Error de post no encontrado
 var ErrPostNotFound = &RepositoryError{"post no encontrado"}
 
 type RepositoryError struct {

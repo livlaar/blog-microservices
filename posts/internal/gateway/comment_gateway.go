@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-// CommentDTO representa el comentario recibido del servicio Comments
 type CommentDTO struct {
 	ID        string `json:"id"`
 	PostID    string `json:"post_id"`
@@ -16,13 +15,11 @@ type CommentDTO struct {
 	CreatedAt string `json:"created_at"`
 }
 
-// CommentsGateway hace llamadas HTTP al servicio Comments
 type CommentsGateway struct {
 	baseURL string
 	client  *http.Client
 }
 
-// NewCommentsGateway crea un nuevo gateway
 func NewCommentsGateway(baseURL string) *CommentsGateway {
 	return &CommentsGateway{
 		baseURL: baseURL,
@@ -30,7 +27,6 @@ func NewCommentsGateway(baseURL string) *CommentsGateway {
 	}
 }
 
-// GetCommentsByPost obtiene los comentarios de un post
 func (g *CommentsGateway) GetCommentsByPost(postID string) ([]CommentDTO, error) {
 	url := fmt.Sprintf("%s/posts/%s/comments", g.baseURL, postID)
 	resp, err := g.client.Get(url)

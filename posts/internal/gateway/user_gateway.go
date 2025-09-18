@@ -10,14 +10,12 @@ import (
 	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
-// UserDTO representa el usuario obtenido desde Users
 type UserDTO struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-// UsersGateway hace llamadas HTTP al servicio Users
 type UsersGateway struct {
 	baseURL string
 	client  *http.Client

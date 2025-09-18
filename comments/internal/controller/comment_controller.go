@@ -34,6 +34,5 @@ func (c *CommentController) CreateComment(comment model.Comment) error {
 		return fmt.Errorf("post no encontrado")
 	}
 
-	// Guardar comentario
 	return c.repo.Create(comment)
 }

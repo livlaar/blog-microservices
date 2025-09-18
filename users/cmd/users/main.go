@@ -33,7 +33,6 @@ func main() {
 	r.HandleFunc("/users", h.CreateUser).Methods("POST")
 	r.HandleFunc("/health", h.Health)
 
-	// Registro en Consul
 	config := api.DefaultConfig()
 	config.Address = consulAddr
 	client, err := api.NewClient(config)
@@ -43,7 +42,7 @@ func main() {
 			Name: "users",
 			Port: 8001,
 			Check: &api.AgentServiceCheck{
-				HTTP:     "http://users:8001/health",
+				HTTP:     "http://blog-microservices-users-1:8001/health",
 				Interval: "10s",
 				Timeout:  "2s",
 			},
