@@ -1,20 +1,17 @@
 package controller
 
 import (
-	"fmt"
-
-	"github.com/livlaar/blog-microservices/comments/internal/gateway"
+	"github.com/google/uuid"
 	"github.com/livlaar/blog-microservices/comments/internal/repository"
 	model "github.com/livlaar/blog-microservices/shared/models"
 )
 
 type CommentController struct {
-	repo    repository.CommentRepository
-	postsGw *gateway.PostsGateway
+	repo repository.CommentRepository
 }
 
-func NewCommentController(repo repository.CommentRepository, postsGw *gateway.PostsGateway) *CommentController {
-	return &CommentController{repo: repo, postsGw: postsGw}
+func NewCommentController(r repository.CommentRepository) *CommentController {
+	return &CommentController{repo: r}
 }
 
 func (c *CommentController) GetCommentByID(id string) (model.Comment, error) {
@@ -26,13 +23,9 @@ func (c *CommentController) GetCommentsByPost(postID string) ([]model.Comment, e
 }
 
 func (c *CommentController) CreateComment(comment model.Comment) error {
-	exists, err := c.postsGw.CheckPostExists(comment.PostID)
-	if err != nil {
-		return fmt.Errorf("error verificando post: %w", err)
+	// Asigna ID si viene vacío
+	if comment.ID == "" {
+		comment.ID = uuid.NewString()
 	}
-	if !exists {
-		return fmt.Errorf("post no encontrado")
-	}
-
 	return c.repo.Create(comment)
 }

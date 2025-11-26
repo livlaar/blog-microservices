@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-service
+  labels:
+    app: comments-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comments-service
+  template:
+    metadata:
+      labels:
+        app: comments-service
+    spec:
+      containers:
+        - name: comments-service
+          image: 0248341/comments-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50051
+          env:
+            - name: POSTS_GRPC_HOST
+              value: "posts-service:50052"
+          volumeMounts:
+            - name: comments-data
+              mountPath: /app/data/comments
+      volumes:
+        - name: comments-data
+          configMap:
+            name: comments-config

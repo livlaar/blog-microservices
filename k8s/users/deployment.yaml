@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-service
+  labels:
+    app: users-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-service
+  template:
+    metadata:
+      labels:
+        app: users-service
+    spec:
+      containers:
+        - name: users-service
+          image: 0248341/users-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50053
+          volumeMounts:
+            - name: users-data
+              mountPath: /app/data/users
+      volumes:
+        - name: users-data
+          configMap:
+            name: users-config

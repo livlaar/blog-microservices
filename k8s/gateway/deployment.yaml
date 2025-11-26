@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: 0248341/gateway-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: USERS_GRPC_HOST
+              value: "users-service:50053"
+            - name: POSTS_GRPC_HOST
+              value: "posts-service:8080"
+            - name: COMMENTS_GRPC_HOST
+              value: "comments-service:50052"

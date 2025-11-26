@@ -1,59 +1,38 @@
-version: "3.9"  # o la versión que quieras usar
+version: "3.9"
 
 services:
-
-  consul:
-    image: hashicorp/consul:1.15
-    container_name: consul
+  users:
+    build:
+      context: .                # <--- antes era ./users
+      dockerfile: users/Dockerfile
+    container_name: users-service
     ports:
-      - "8500:8500"
-      - "8600:8600/udp"
-    command: agent -dev -client=0.0.0.0
+      - "50051:50051"
 
   posts:
     build:
       context: .
-      dockerfile: ./posts/Dockerfile
+      dockerfile: posts/Dockerfile
+    container_name: posts-service
     ports:
-      - "8002:8002"
-    depends_on:
-      - consul
-      - comments
-      - users
-    environment:
-      - COMMENTS_ADDR=http://localhost:8003
-      - USERS_ADDR=http://localhost:8001
-    volumes:
-      - ./data/posts:/app/data 
-    labels:
-      - "consul.register=true"
+      - "50052:50052"
 
   comments:
     build:
       context: .
-      dockerfile: ./comments/Dockerfile
+      dockerfile: comments/Dockerfile
+    container_name: comments-service
     ports:
-      - "8003:8003"
-    depends_on:
-      - consul
-    volumes:
-      - ./data/comments:/app/data 
-    labels:
-      - "consul.register=true"
+      - "50053:50053"
 
-  users:
+  gateway:
     build:
       context: .
-      dockerfile: ./users/Dockerfile
-    ports:
-      - "8001:8001"
+      dockerfile: gateway/Dockerfile
+    container_name: gateway-service
     depends_on:
-      - consul
-    environment:
-      - PORT=8001
-      - CONSUL_ADDR=http://consul:8500
-    volumes:
-      - ./data/users:/app/data
-      - ./shared:/app/shared
-    labels:
-      - "consul.register=true"
+      - users
+      - posts
+      - comments
+    ports:
+      - "8080:8080"

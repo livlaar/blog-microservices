@@ -1,0 +1,72 @@
+syntax = "proto3";
+package blog;
+
+option go_package = "github.com/livlaar/blog-microservices/shared/proto;proto";
+
+// --- Posts service (exposed)
+service Posts {
+  rpc GetPostWithComments(GetPostRequest) returns (GetPostResponse);
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+}
+
+message GetPostRequest {
+  string id = 1;
+}
+
+message PostDTO {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+  string author_id = 4;
+  string created_at = 5;
+}
+
+message GetPostResponse {
+  PostDTO post = 1;
+  repeated CommentDTO comments = 2;
+}
+
+message CreatePostRequest {
+  PostDTO post = 1;
+}
+message CreatePostResponse {
+  bool ok = 1;
+}
+
+// --- Comments service (internal)
+service Comments {
+  rpc GetCommentsByPost(GetCommentsRequest) returns (GetCommentsResponse);
+  rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse);
+}
+
+message GetCommentsRequest { string post_id = 1; }
+message GetCommentsResponse { repeated CommentDTO comments = 1; }
+
+message CreateCommentRequest {
+  CommentDTO comment = 1;
+}
+message CreateCommentResponse { bool ok = 1; }
+
+message CommentDTO {
+  string id = 1;
+  string post_id = 2;
+  string author_id = 3;
+  string content = 4;
+  string created_at = 5;
+}
+
+// --- Users service (internal)
+service Users {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
+
+message GetUserRequest { string id = 1; }
+message GetUserResponse { UserDTO user = 1; }
+message CreateUserRequest { UserDTO user = 1; }
+message CreateUserResponse { bool ok = 1; }
+
+message UserDTO {
+  string id = 1;
+  string name = 2;
+}
